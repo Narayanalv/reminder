@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo list</title>
+    <style>
+        *{font-size: 20px;}
+        .setremider,#reminder{margin-top: 10%;box-shadow: 1px 0px 8px 2px;border-radius: 20px;width: 30%;height: 50%;background-color: rgb(161, 161, 161);display: block;position: relative;}
+        .back{width: auto;height: auto;display: inline-block;margin-left: -45%;position: absolute;}
+    </style>
+</head>
+<body>
+    <center>
+        <div class="setremider">
+            <p>Set Reminder</p>
+            <input type="text" placeholder="Reminder Name" id="rname">
+            <input type="time" name="" id="time" style="width: auto;height: 30px;">
+            <br>
+            <br>
+            <input type="button" id="stime" value="set time">
+            <br>
+            <br>
+            <button id="manage">Manage Reminder</button>
+        </div>
+        <div id="reminder" style="display: none;background-color: rgb(161, 161, 161);">
+            <button class="back">back</button>
+            <p>Reminder</p>
+            <div class="remlist"></div>
+        </div>
+    </center>
+    <script>
+        localStorage.setItem("WakeUp","5:00");
+        localStorage.setItem("Gym","6:00");
+        localStorage.setItem("Break Fast","7:00");
+        localStorage.setItem("Meeting","10:00");
+        localStorage.setItem("Lunch","13:00");
+        localStorage.setItem("Quick nap","16:00");
+        localStorage.setItem("Goto Library","18:00");
+        localStorage.setItem("Dinner","20:00");
+        localStorage.setItem("Sleep","21:00");
+
+        /*var WakeUp="5:00";
+        var Gym="6:00";
+        var Break="7:00";
+        var Meeting="10:00";
+        var Lunch="13:00";
+        var Quick="16:00";
+        var Goto_Library="18:00";
+        var Dinner="20:00";
+        var Sleep="21:00";*/
+        const time=document.getElementById('time');
+        var time1;
+        var a;
+        time.addEventListener('focusout',()=>{
+            var intervel=setInterval(check,1000);
+        })
+        function check(){
+            var a=time.value;
+            var date=new Date();
+            var time1=date.toLocaleString('en-US',{hour:'numeric',minute:'numeric',hour12:false});
+            if(a===time1){
+                alert('time up');
+            }
+        }
+        const rname=document.getElementById('rname');
+        const stime=document.getElementById('stime');
+        stime.addEventListener('click',()=>{
+            var b=time.value;
+            var c=rname.value;
+            localStorage.setItem(c,b)
+            alert("Reminder Set");
+            time.value="";
+            rname.value="";
+        })
+        const setremider=document.querySelector('.setremider');
+        const manage=document.getElementById("manage");
+        manage.addEventListener("click",()=>{
+            setremider.style.display="none";
+            manageremind();
+        })
+        const reminder=document.getElementById('reminder');
+        const remlist=document.querySelector('.remlist');
+        function manageremind() {
+            function removeElement(element) {
+            if (element && element.parentNode) {
+                    element.parentNode.removeChild(element);
+                }
+            }
+            function removeAllElements() {
+                while (remlist.firstChild) {
+                    removeElement(remlist.firstChild);
+                }
+            }
+            removeAllElements();
+            var j=1;
+            let data = [];
+            reminder.style.display="block";
+            for (let key of Object.keys(localStorage)) {
+                let value = localStorage.getItem(key);
+                data.push({ key, value });
+                const name=document.createElement("label");
+                const btn=document.createElement("img");
+                const br=document.createElement('br');
+                name.style.width="auto";
+                name.style.height="30px";
+                name.style.fontSize="20px";
+                name.style.display="inline";
+                name.innerHTML=key+" - "+value;
+                name.style.marginLeft="5%";
+                btn.style.marginLeft="10px";
+                btn.style.display="inline";
+                btn.style.width="auto";
+                btn.style.height="15px";
+                btn.title=key;
+                btn.src="delete.png";
+                remlist.appendChild(name);
+                remlist.appendChild(br);
+                remlist.appendChild(btn);
+                remlist.appendChild(br);
+                remlist.appendChild(br);
+                remlist.appendChild(br);
+                btn.addEventListener('click',dele);
+                function dele(event){
+                    var k=event.target;
+                    var ke=k.title;
+                    localStorage.removeItem(ke);
+                    manageremind();
+                }
+            }
+        }
+        const back=document.querySelector('.back');
+        back.addEventListener('click',()=>{
+            reminder.style.display="none";
+            setremider.style.display="block";
+        })
+    </script>
+</body>
+</html>
