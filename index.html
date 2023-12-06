@@ -39,28 +39,23 @@
         localStorage.setItem("Goto Library","18:00");
         localStorage.setItem("Dinner","20:00");
         localStorage.setItem("Sleep","21:00");
-
-        /*var WakeUp="5:00";
-        var Gym="6:00";
-        var Break="7:00";
-        var Meeting="10:00";
-        var Lunch="13:00";
-        var Quick="16:00";
-        var Goto_Library="18:00";
-        var Dinner="20:00";
-        var Sleep="21:00";*/
         const time=document.getElementById('time');
         var time1;
-        var a;
-        time.addEventListener('focusout',()=>{
-            var intervel=setInterval(check,1000);
-        })
+        var intervel=setInterval(check,1000);
         function check(){
-            var a=time.value;
+            let timing;
+            let name=[];
+            let tim=[];
             var date=new Date();
             var time1=date.toLocaleString('en-US',{hour:'numeric',minute:'numeric',hour12:false});
-            if(a===time1){
-                alert('time up');
+            for (let key of Object.keys(localStorage)) {
+                let timing = localStorage.getItem(key);
+                name.push({ key, timing });
+                tim.push(timing);
+            }
+            if(tim.includes(time1)){
+                let a=localStorage.getItem(time1);
+                alert('time up for your '+a);
             }
         }
         const rname=document.getElementById('rname');
